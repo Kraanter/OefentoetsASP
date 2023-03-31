@@ -1,0 +1,52 @@
+@model IndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Naam</th>
+        <th>EC</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Vakken) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Naam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EC)
+            </td>
+            <td>
+                
+                @if (!item.Pogingen.Any())
+                {<a asp-controller="Poging" asp-action="CreateSpecial" asp-route-id="@item.Id">Poging toevoegen</a>}
+                else if (item.Pogingen.OrderByDescending(i => i.Resultaat).First().Resultaat < 6)
+                {
+                    <a asp-controller="Poging" asp-action="CreateSpecial" asp-route-id="@item.Id">@item.Pogingen.OrderByDescending(i => i.Resultaat).First().Resultaat</a>
+                }
+                else
+                {<a>behaald</a>}
+            </td>
+        </tr>
+    }
+    </tbody>
+    
+</table>
+<div style="color: green">
+ <a>Messages:</a>
+   <ul>
+       @foreach (var message in Model.Log)
+       {
+           <li>@message</li>
+       }
+   </ul> 
+</div>
+  
